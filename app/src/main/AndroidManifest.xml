@@ -24,6 +24,8 @@
             android:label="@string/title_activity_board"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activities.CardActivity" />
+        <activity android:name=".activities.ThemeActivity"></activity>
     </application>
 
 </manifest>

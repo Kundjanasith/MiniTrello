@@ -14,11 +14,13 @@ public class Task implements Serializable{
     private String task_name;
     private List<Card> task_card;
     private long task_createTime;
+    private Date task_date;
 
     public Task(String task_name){
         this.task_name = task_name;
         this.task_card = new ArrayList<Card>();
         this.task_createTime = System.currentTimeMillis();
+        this.task_date = new Date();
     }
 
     public String getTask_name() {
@@ -46,9 +48,8 @@ public class Task implements Serializable{
     }
 
     public String getReableCreatedTime(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        Date date = new Date();
-        return sdf.format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        return sdf.format(this.task_date);
     }
 
     @Override

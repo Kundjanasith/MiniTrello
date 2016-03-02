@@ -2,23 +2,29 @@ package com.example.exceed.minitrello.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.exceed.minitrello.R;
 import com.example.exceed.minitrello.models.Board;
+import com.example.exceed.minitrello.models.Card;
 import com.example.exceed.minitrello.models.Storage;
 import com.example.exceed.minitrello.models.Task;
+import com.example.exceed.minitrello.views.CardAdapter;
 import com.example.exceed.minitrello.views.TaskAdapter;
 
 import java.util.ArrayList;
@@ -46,16 +52,24 @@ public class TaskFragment extends Fragment{
     private OnFragmentInteractionListener mListener;
     private FloatingActionButton add_task_button;
     private List<Task> listTask;
+    private List<Card> cards;
     private BoardActivity board;
     private TextView taskName;
     private static int num_task = 0;
     private String title;
     private int position;
+    private Button add_card_button;
+//    private ListView listView;
+    private CardAdapter cardAdapter;
+    private RecyclerView recList;
+
+
     public TaskFragment(Task task,TaskAdapter taskAdapter,BoardActivity board,String title,int position) {
         // Required empty public constructor
         this.task = task;
         this.taskAdapter = taskAdapter;
         this.listTask = new ArrayList<Task>();
+        this.cards = new ArrayList<Card>();
         this.board = board;
         this.title = title;
         this.position = position;
@@ -83,7 +97,6 @@ public class TaskFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
@@ -94,25 +107,111 @@ public class TaskFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_task, container, false);
+
         init(v);
         return v;
     }
 
     private void init(View v){
         taskName = (TextView) v.findViewById(R.id.task_name);
-        taskName.setTextColor(Color.WHITE);
         if(title.equals("Add Task")&&position==0&&Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>=1)
             taskName.setText("Task name : "+Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
-//        Log.i("Poss",position+"/"+title);
         else if(!title.equals("Add Task"))taskName.setText("Task name : "+title);
         else taskName.setText(title);
         add_task_button = (FloatingActionButton) v.findViewById(R.id.add_task_button);
+        add_card_button = (Button) v.findViewById(R.id.add_card_button);
+        if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()==0) {
+            add_task_button.setVisibility(v.VISIBLE);
+            add_card_button.setVisibility(v.INVISIBLE);
+        }
+        else{
+            if(position==Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()-1) {
+                add_task_button.setVisibility(v.VISIBLE);
+            }
+            else {
+                add_task_button.setVisibility(v.INVISIBLE);
+            }
+        }
+//        cardAdapter = new CardAdapter( getContext(), R.layout.cell_card, cards);
+//        listView = (ListView) v.findViewById(R.id.card_listView);
+//        listView.setAdapter(cardAdapter);
+        recList = (RecyclerView) v.findViewById(R.id.card_cardList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+        cardAdapter = new CardAdapter(this,(Board)board.getIntent().getSerializableExtra("board"),task);
+        recList.setHasFixedSize(true);
+        recList.setItemAnimator(new DefaultItemAnimator());
+        recList.setAdapter(cardAdapter);
+        cardAdapter.SetOnItemClickListener(new CardAdapter.OnItemClickListener(){
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(board, CardActivity.class);
+                intent.putExtra("card", cards.get(position));
+                intent.putExtra("task", task);
+                Board temp = (Board) board.getIntent().getSerializableExtra("board");
+                intent.putExtra("board", temp);
+                intent.putExtra("pos", position);
+                startActivity(intent);
+            }
+        });
+
+
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(board, CardActivity.class);
+//                intent.putExtra("card", cards.get(position));
+//                intent.putExtra("task", task);
+//                Board temp = (Board) board.getIntent().getSerializableExtra("board");
+//                intent.putExtra("board", temp);
+//                intent.putExtra("pos", position);
+//                startActivity(intent);
+//            }
+//        });
         add_task_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showInputDialog();
             }
         });
+        add_card_button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                showInputDialog1();
+            }
+        });
+    }
+
+    private void showInputDialog1(){
+        LayoutInflater layoutInflater = LayoutInflater.from(this.getContext());
+        final View promptView = layoutInflater.inflate(R.layout.input_card, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        builder.setView(promptView);
+        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Storage.getInstance().saveCard((Board) board.getIntent().getSerializableExtra("board")
+                        , Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position)
+                        , new Card(editText.getText().toString(), ""));
+                refreshCards();
+                cardAdapter.notifyDataSetChanged();
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (Card s : Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))) {
+                    Log.i("XJ", s.getCard_name());
+                }
+                dialog.cancel();
+                refreshCards();
+            }
+        });
+        builder.show();
     }
 
     private void showInputDialog() {
@@ -125,7 +224,8 @@ public class TaskFragment extends Fragment{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("edasdokg", board.getIntent().getSerializableExtra("board").hashCode() + "");
-                Storage.getInstance().saveTask((Board) board.getIntent().getSerializableExtra("board"), new Task(editText.getText().toString()));
+                task = new Task(editText.getText().toString());
+                Storage.getInstance().saveTask((Board) board.getIntent().getSerializableExtra("board"), task);
                 Log.i("TH-BOARD", ((Board) board.getIntent().getSerializableExtra("board")).getBoard_name());
                 for(Task s:Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board"))){
                     Log.i("TH-TASK", s.getTask_name());
@@ -135,8 +235,19 @@ public class TaskFragment extends Fragment{
 //                if(taskName.getText().equals("Add Task"))
 //                    taskName.setText(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
                 refreshTasks();
-//                taskName.setText(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(num_task).getTask_name());
                 Log.i("Title", title);
+                if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()==0) {
+                    add_task_button.setVisibility(View.VISIBLE);
+                }
+                else{
+                    if(position==Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()-1) {
+                        add_task_button.setVisibility(View.VISIBLE);
+                    }
+                    else {
+                        add_task_button.setVisibility(View.INVISIBLE);
+                    }
+                }
+                add_card_button.setVisibility(View.VISIBLE);
                 num_task++;
                 taskAdapter.notifyDataSetChanged();
             }
@@ -144,7 +255,7 @@ public class TaskFragment extends Fragment{
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for(Task s:Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board"))){
+                for(Task s:Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))){
                     Log.e("Task-S", s.getTask_name());
                 }
                 dialog.cancel();
@@ -158,13 +269,29 @@ public class TaskFragment extends Fragment{
         return num_task+1;
     }
 
+    public List<Card> getCard(){
+        return this.cards;
+    }
+
     private void refreshTasks(){
         listTask.clear();
-        if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board"))!=null)
-            for (Task task: Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board"))) {
+        if(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))!=null) {
+            for (Task task : Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))) {
                 listTask.add(task);
             }
+        }
         taskAdapter.notifyDataSetChanged();
+    }
+
+    private void refreshCards(){
+        cards.clear();
+        if(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).size()>=1)
+        if(Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"),Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))!=null){
+            for (Card c : Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))) {
+                cards.add(c);
+            }
+        }
+        cardAdapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -210,5 +337,6 @@ public class TaskFragment extends Fragment{
     public void onStart() {
         super.onStart();
         refreshTasks();
+        refreshCards();
     }
 }

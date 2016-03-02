@@ -12,11 +12,13 @@ public class Comment implements Serializable{
     private String comment_name;
     private String comment_content;
     private long comment_createTime;
+    private Date comment_date;
 
     public Comment(String comment_name,String comment_content){
         this.comment_name = comment_name;
         this.comment_content = comment_content;
         comment_createTime = System.currentTimeMillis();
+        this.comment_date = new Date();
     }
 
     public String getComment_name() {
@@ -44,9 +46,8 @@ public class Comment implements Serializable{
     }
 
     public String getReableCreatedTime(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        Date date = new Date();
-        return sdf.format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        return sdf.format(this.comment_date);
     }
 
     @Override

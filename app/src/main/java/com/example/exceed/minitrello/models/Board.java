@@ -3,6 +3,7 @@ package com.example.exceed.minitrello.models;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -14,11 +15,13 @@ public class Board implements Serializable{
     private String board_name;
     private List<Task> board_tasks;
     private long board_createTime;
+    private Date board_date;
 
     public Board(String board_name){
         this.board_name = board_name;
         this.board_tasks = new ArrayList<Task>();
         this.board_createTime = System.currentTimeMillis();
+        this.board_date = new Date();
     }
 
     public String getBoard_name() {
@@ -46,9 +49,8 @@ public class Board implements Serializable{
     }
 
     public String getReableCreatedTime(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        Date date = new Date();
-        return sdf.format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        return sdf.format(this.board_date);
     }
 
     @Override
@@ -64,4 +66,19 @@ public class Board implements Serializable{
     public int hashCode() {
         return (int) (board_createTime ^ (board_createTime >>> 32));
     }
+
+    public static class AlphabetComparator implements Comparator<Board> {
+        @Override
+        public int compare(Board board1, Board board2) {
+            return board1.getBoard_name().compareTo(board2.getBoard_name());
+        }
+    }
+
+    public static class CreatedTimeComparator implements Comparator<Board>{
+        @Override
+        public int compare(Board board1, Board board2) {
+            return (int)(board1.getBoard_createTime()-board2.getBoard_createTime());
+        }
+    }
+
 }

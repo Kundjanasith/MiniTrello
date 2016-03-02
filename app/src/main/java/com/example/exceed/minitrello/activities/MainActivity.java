@@ -6,30 +6,40 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.example.exceed.minitrello.R;
 import com.example.exceed.minitrello.models.Board;
 import com.example.exceed.minitrello.models.Storage;
 import com.example.exceed.minitrello.views.BoardAdapter;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+import static com.example.exceed.minitrello.views.BoardAdapter.*;
+
+public class MainActivity extends AppCompatActivity implements Serializable{
 
     private BoardAdapter boardAdapter;
     private List<Board> boards;
     private FloatingActionButton addBoardButton ;
-    private ListView listView;
+    private Button button_sort_az;
+    private Button button_sort_time;
+    private RecyclerView recList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,21 +52,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void init(){
         boards = new ArrayList<Board>();
-        boardAdapter = new BoardAdapter(this, R.layout.cell_board, boards);
-        listView = (ListView) findViewById(R.id.note_list_view);
-        listView.setAdapter(boardAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        recList = (RecyclerView) findViewById(R.id.board_cardList);
+        recList.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setOrientation(LinearLayoutManager.VERTICAL);
+        recList.setLayoutManager(llm);
+        boardAdapter = new BoardAdapter(this);
+        recList.setHasFixedSize(true);
+        recList.setItemAnimator(new DefaultItemAnimator());
+        recList.setAdapter(boardAdapter);
+        boardAdapter.SetOnItemClickListener(new OnItemClickListener(){
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(View view, int position) {
+                Log.i("PosKU",position+"");
                 Intent intent = new Intent(MainActivity.this, BoardActivity.class);
-                Log.i("456okg", boards.get(position).getReableCreatedTime() + "");
-                intent.putExtra("board", boards.get(position));
-                Log.i("456999kg", boards.get(position).getReableCreatedTime() + "");
+                intent.putExtra("board",boards.get(position));
                 startActivity(intent);
             }
         });
         addBoardButton = (FloatingActionButton) findViewById(R.id.add_board_button);
-        addBoardButton.setOnClickListener(new View.OnClickListener() {
+        addBoardButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 showInputDialog();
@@ -89,27 +104,55 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            Log.i("Kundjanasith","TH");
             return true;
         }
-
+        if (id == R.id.action_theme) {
+            Intent intent = new Intent(MainActivity.this, ThemeActivity.class);
+            intent.putExtra("MainActivity", this);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.action_sort){
+            LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
+            final View promptView = layoutInflater.inflate(R.layout.input_sort, null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+            builder.setView(promptView);
+            button_sort_az = (Button) promptView.findViewById(R.id.sort_az_button);
+            button_sort_time = (Button) promptView.findViewById(R.id.sort_time_button);
+            button_sort_az.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Collections.sort(boards, new Board.AlphabetComparator());
+                    boardAdapter.notifyDataSetChanged();
+                }
+            });
+            button_sort_time.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Collections.sort(boards,new Board.CreatedTimeComparator());
+                    boardAdapter.notifyDataSetChanged();
+                }
+            });
+            builder.show();
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    private void refreshBoards(){
+     public void refreshBoards(){
         boards.clear();
         for(Board board : Storage.getInstance().loadBoard()){
             boards.add(board);
@@ -122,4 +165,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         refreshBoards();
     }
+
+    public List<Board> getBoard(){
+        return this.boards;
+    }
+
 }

@@ -9,18 +9,20 @@ import java.util.List;
 /**
  * Created by exceed on 2/26/16 AD.
  */
-public class Card implements Serializable{
+public class Card implements Serializable {
 
     private String card_name;
     private String card_description;
     private List<Comment> card_comments;
     private long card_createTime;
+    private Date card_date;
 
     public Card(String card_name, String card_description) {
         this.card_name = card_name;
         this.card_description = card_description;
         this.card_comments = new ArrayList<Comment>();
         this.card_createTime = System.currentTimeMillis();
+        this.card_date = new Date();
     }
 
     public String getCard_name() {
@@ -56,9 +58,8 @@ public class Card implements Serializable{
     }
 
     public String getReableCreatedTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm");
-        Date date = new Date();
-        return sdf.format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        return sdf.format(this.card_date);
     }
 
     @Override
