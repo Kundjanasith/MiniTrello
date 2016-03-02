@@ -15,48 +15,34 @@ import com.example.exceed.minitrello.activities.TaskFragment;
 import com.example.exceed.minitrello.models.Board;
 import com.example.exceed.minitrello.models.Card;
 import com.example.exceed.minitrello.models.Storage;
-import com.example.exceed.minitrello.models.Task;
 
 import java.util.List;
 
 /**
  * Created by exceed on 2/29/16 AD.
  */
-//public class CardAdapter extends ArrayAdapter<Card> implements Serializable{
-//
-//    public CardAdapter(Context context, int resource, List<Card> objects) {
-//        super(context, resource, objects);
-//    }
-//
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        View v = convertView;
-//        if(v==null){
-//            LayoutInflater vi = LayoutInflater.from(getContext());
-//            v = vi.inflate(R.layout.cell_card, null);
-//        }
-//        TextView card_name = (TextView) v.findViewById(R.id.card_name);
-//        TextView card_time = (TextView) v.findViewById(R.id.card_time);
-//        Card card = getItem(position);
-//        card_name.setText("Card name : " + card.getCard_name());
-//        card_time.setText("Created time : "+card.getReableCreatedTime());
-//        return v;
-//    }
-//}
+
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private final List<Card> cards;
     private Board board;
-    private Task task;
+//    private Task task;
+    private int position;
     OnItemClickListener mItemClickListener;
     private ViewHolder viewHolder;
 
-    public CardAdapter(TaskFragment taskFragment,Board board,Task task) {
+    public CardAdapter(TaskFragment taskFragment,Board board,int position) {
         this.cards = taskFragment.getCard();
+//        this.board = (Board) boardActivity.getIntent().getSerializableExtra("board");
+//        this.task = (Task) boardActivity.getIntent().getSerializableExtra("task");
         this.board = board;
-        this.task = task;
+//        this.task = Storage.getInstance().loadTask(board).get(position);
+        this.position = position;
     }
 
+//    public void setTask(Task task){
+//        this.task = task;
+//    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
@@ -70,8 +56,10 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         if(cards.size()>0) {
-            Log.i("Storage-Size1",Storage.getInstance().loadCard(board,task).size()+"");
-            Log.i("Card-Size",cards.size()+"");
+//            Log.i("Storage-Size0",board.getBoard_name());
+//            Log.i("Storage-Size0", task.getTask_name());
+//            Log.i("Storage-Size1",Storage.getInstance().loadCard(board,task).size()+"");
+//            Log.i("Card-Size",cards.size()+"");
             viewHolder.card_name.setText("Card name : " + cards.get(i).getCard_name());
             viewHolder.card_time.setText("Created time : " + cards.get(i).getReableCreatedTime());
             clickDelete(i);
@@ -91,7 +79,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Storage.getInstance().loadCard(board, task).get(i).setCard_name(editText.getText().toString());
+                        Storage.getInstance().loadTask(board).get(position).getTask_card().get(i).setCard_name(editText.getText().toString());
                         cards.get(i).setCard_name(editText.getText().toString());
                         notifyDataSetChanged();
                     }
@@ -100,9 +88,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.i("TEST", "POL");
-                        for (Card c : Storage.getInstance().loadCard(board, task)) {
-                            Log.i("TESTPRO", c.getCard_name());
-                        }
+//                        for (Card c : Storage.getInstance().loadCard(board, task)) {
+//                            Log.i("TESTPRO", c.getCard_name());
+//                        }
                         dialog.cancel();
                     }
                 });
@@ -124,8 +112,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Storage.getInstance().removeCard(board,task,i);
-                        cards.remove(i);
+                        if(Storage.getInstance().removeCard(board, Storage.getInstance().loadTask(board).get(position), cards.get(i))) cards.remove(i);
                         notifyDataSetChanged();
                     }
                 });
@@ -133,9 +120,9 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Log.i("JAPAN","ss");
-                        for(Card s:Storage.getInstance().loadCard(board,task)){
-                            Log.i("JAPAN",s.getCard_name());
-                        }
+//                        for(Card s:Storage.getInstance().loadCard(board,task)){
+//                            Log.i("JAPAN",s.getCard_name());
+//                        }
                         dialog.cancel();
                     }
                 });

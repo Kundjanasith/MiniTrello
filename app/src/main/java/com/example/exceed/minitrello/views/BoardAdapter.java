@@ -89,7 +89,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Storage.getInstance().removeBoard(i);
+                        Storage.getInstance().removeBoard(boards.get(i));
                         boards.remove(i);
                         notifyDataSetChanged();
                     }

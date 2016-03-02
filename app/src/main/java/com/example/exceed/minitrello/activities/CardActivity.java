@@ -78,7 +78,7 @@ public class CardActivity extends AppCompatActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Storage.getInstance().saveComment(bo, ta, ca, new Comment(comment_name.getText().toString(), comment_text.getText().toString()));
+                Storage.getInstance().saveComment(bo,ta, ca, new Comment(comment_name.getText().toString(), comment_text.getText().toString()));
                 refreshComments();
             }
         });
@@ -116,8 +116,7 @@ public class CardActivity extends AppCompatActivity {
     }
 
     private void refreshDescription() {
-        description.setText(Storage.getInstance().loadCard(bo, ta).get(pos).getCard_description());
+        description.setText(Storage.getInstance().loadCard(bo,ta).get(pos).getCard_description());
     }
-
 
 }

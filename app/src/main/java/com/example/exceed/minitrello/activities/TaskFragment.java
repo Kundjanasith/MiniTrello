@@ -47,13 +47,13 @@ public class TaskFragment extends Fragment{
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private Task task;
+//    private Task task;
     private TaskAdapter taskAdapter;
     private OnFragmentInteractionListener mListener;
     private FloatingActionButton add_task_button;
     private List<Task> listTask;
     private List<Card> cards;
-    private BoardActivity board;
+    private Board board;
     private TextView taskName;
     private static int num_task = 0;
     private String title;
@@ -64,9 +64,9 @@ public class TaskFragment extends Fragment{
     private RecyclerView recList;
 
 
-    public TaskFragment(Task task,TaskAdapter taskAdapter,BoardActivity board,String title,int position) {
+    public TaskFragment(TaskAdapter taskAdapter,Board board,String title,int position) {
         // Required empty public constructor
-        this.task = task;
+//        this.task = task;
         this.taskAdapter = taskAdapter;
         this.listTask = new ArrayList<Task>();
         this.cards = new ArrayList<Card>();
@@ -85,7 +85,7 @@ public class TaskFragment extends Fragment{
      */
     // TODO: Rename and change types and number of parameters
     public TaskFragment newInstance(String param1, String param2) {
-        TaskFragment fragment = new TaskFragment(this.task,this.taskAdapter,this.board,this.title,this.position);
+        TaskFragment fragment = new TaskFragment(this.taskAdapter,this.board,this.title,this.position);
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -107,25 +107,28 @@ public class TaskFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_task, container, false);
-
         init(v);
         return v;
     }
 
     private void init(View v){
         taskName = (TextView) v.findViewById(R.id.task_name);
-        if(title.equals("Add Task")&&position==0&&Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>=1)
-            taskName.setText("Task name : "+Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
+//        if(title.equals("Add Task")&&position==0&&Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>=1)
+//            taskName.setText("Task name : "+Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
+        if(title.equals("Add Task")&&position==0&&Storage.getInstance().loadTask(board).size()>=1)
+            taskName.setText("Task name : "+Storage.getInstance().loadTask(board).get(0).getTask_name());
         else if(!title.equals("Add Task"))taskName.setText("Task name : "+title);
         else taskName.setText(title);
         add_task_button = (FloatingActionButton) v.findViewById(R.id.add_task_button);
         add_card_button = (Button) v.findViewById(R.id.add_card_button);
-        if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()==0) {
+//        if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()==0) {
+        if(Storage.getInstance().loadTask(board).size()==0) {
             add_task_button.setVisibility(v.VISIBLE);
             add_card_button.setVisibility(v.INVISIBLE);
         }
         else{
-            if(position==Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()-1) {
+//            if(position==Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()-1) {
+            if(position==Storage.getInstance().loadTask(board).size()-1) {
                 add_task_button.setVisibility(v.VISIBLE);
             }
             else {
@@ -140,19 +143,28 @@ public class TaskFragment extends Fragment{
         LinearLayoutManager llm = new LinearLayoutManager(this.getContext());
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         recList.setLayoutManager(llm);
-        cardAdapter = new CardAdapter(this,(Board)board.getIntent().getSerializableExtra("board"),task);
+//        if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>0)
+//            cardAdapter = new CardAdapter(this,(Board)board.getIntent().getSerializableExtra("board"),Storage.getInstance().loadTask(((Board) board.getIntent().getSerializableExtra("board"))).get(position));
+//        else cardAdapter = new CardAdapter(this,(Board)board.getIntent().getSerializableExtra("board"),task);
+//        cardAdapter = new CardAdapter(this,(Board)board.getIntent().getSerializableExtra("board"),position);
+        cardAdapter = new CardAdapter(this,board,position);
+//        cardAdapter = new CardAdapter(this,board);
         recList.setHasFixedSize(true);
         recList.setItemAnimator(new DefaultItemAnimator());
         recList.setAdapter(cardAdapter);
         cardAdapter.SetOnItemClickListener(new CardAdapter.OnItemClickListener(){
             @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent(board, CardActivity.class);
-                intent.putExtra("card", cards.get(position));
-                intent.putExtra("task", task);
-                Board temp = (Board) board.getIntent().getSerializableExtra("board");
-                intent.putExtra("board", temp);
-                intent.putExtra("pos", position);
+            public void onItemClick(View view, int i) {
+                Intent intent = new Intent(view.getContext(), CardActivity.class);
+                Log.i("!!!!!!!!!!!!!!!!!!!",position+"");
+                intent.putExtra("card",Storage.getInstance().loadCard(board,Storage.getInstance().loadTask(board).get(position)).get(i));
+//                Board temp = (Board) board.getIntent().getSerializableExtra("board");
+//                intent.putExtra("task", Storage.getInstance().loadTask(temp).get(position));
+//                cardAdapter.setTask(Storage.getInstance().loadTask(temp).get(position));
+//                intent.putExtra("board", temp);
+                intent.putExtra("board",board);
+                intent.putExtra("task",Storage.getInstance().loadTask(board).get(position));
+                intent.putExtra("pos", i);
                 startActivity(intent);
             }
         });
@@ -194,9 +206,12 @@ public class TaskFragment extends Fragment{
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Storage.getInstance().saveCard((Board) board.getIntent().getSerializableExtra("board")
-                        , Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position)
-                        , new Card(editText.getText().toString(), ""));
+//                Log.i("KUN_B", ((Board) board.getIntent().getSerializableExtra("board")).getBoard_name()+":"+((Board) board.getIntent().getSerializableExtra("board")).getReableCreatedTime());
+//                Log.i("KUN_T", Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position).getTask_name()+":"+Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position).getReableCreatedTime());
+//                Storage.getInstance().saveCard((Board) board.getIntent().getSerializableExtra("board")
+//                        , Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position)
+//                        , new Card(editText.getText().toString(), ""));
+                Storage.getInstance().saveCard(board,Storage.getInstance().loadTask(board).get(position),new Card(editText.getText().toString(),""));
                 refreshCards();
                 cardAdapter.notifyDataSetChanged();
             }
@@ -204,9 +219,10 @@ public class TaskFragment extends Fragment{
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for (Card s : Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))) {
-                    Log.i("XJ", s.getCard_name());
-                }
+                Log.i("XJ","PO");
+//                for (Card s : Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))) {
+//                    Log.i("XJ", s.getCard_name());
+//                }
                 dialog.cancel();
                 refreshCards();
             }
@@ -223,24 +239,28 @@ public class TaskFragment extends Fragment{
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Log.i("edasdokg", board.getIntent().getSerializableExtra("board").hashCode() + "");
-                task = new Task(editText.getText().toString());
-                Storage.getInstance().saveTask((Board) board.getIntent().getSerializableExtra("board"), task);
-                Log.i("TH-BOARD", ((Board) board.getIntent().getSerializableExtra("board")).getBoard_name());
-                for(Task s:Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board"))){
-                    Log.i("TH-TASK", s.getTask_name());
-                }
-                if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>=1&&position==0)
-                  taskName.setText("Task name : "+Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
-//                if(taskName.getText().equals("Add Task"))
-//                    taskName.setText(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
+//                Log.i("edasdokg", board.getIntent().getSerializableExtra("board").hashCode() + "");
+//                task = new Task(editText.getText().toString());
+//                Storage.getInstance().saveTask((Board) board.getIntent().getSerializableExtra("board"),  new Task(editText.getText().toString()));
+                Storage.getInstance().saveTask(board,new Task(editText.getText().toString()));
+//                Log.i("TH-BOARD", ((Board) board.getIntent().getSerializableExtra("board")).getBoard_name());
+//                for(Task s:Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board"))){
+//                    Log.i("TH-TASK", s.getTask_name());
+//                }
+//                if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>=1&&position==0)
+//                  taskName.setText("Task name : "+Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
+                if(Storage.getInstance().loadTask(board).size()>=1&&position==0)
+                    taskName.setText("Task name : "+Storage.getInstance().loadTask(board).get(0).getTask_name());
+//
                 refreshTasks();
                 Log.i("Title", title);
-                if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()==0) {
+//                if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()==0) {
+                if(Storage.getInstance().loadTask(board).size()==0) {
                     add_task_button.setVisibility(View.VISIBLE);
                 }
                 else{
-                    if(position==Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()-1) {
+//                    if(position==Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()-1) {
+                    if(position==Storage.getInstance().loadTask(board).size()-1) {
                         add_task_button.setVisibility(View.VISIBLE);
                     }
                     else {
@@ -255,9 +275,9 @@ public class TaskFragment extends Fragment{
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                for(Task s:Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))){
-                    Log.e("Task-S", s.getTask_name());
-                }
+//                for(Task s:Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))){
+//                    Log.e("Task-S", s.getTask_name());
+//                }
                 dialog.cancel();
                 refreshTasks();
             }
@@ -275,8 +295,13 @@ public class TaskFragment extends Fragment{
 
     private void refreshTasks(){
         listTask.clear();
-        if(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))!=null) {
-            for (Task task : Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))) {
+//        if(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))!=null) {
+//            for (Task task : Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))) {
+//                listTask.add(task);
+//            }
+//        }
+        if(Storage.getInstance().loadTask(board)!=null) {
+            for (Task task : Storage.getInstance().loadTask(board)) {
                 listTask.add(task);
             }
         }
@@ -285,10 +310,21 @@ public class TaskFragment extends Fragment{
 
     private void refreshCards(){
         cards.clear();
-        if(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).size()>=1)
-        if(Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"),Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))!=null){
-            for (Card c : Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))) {
-                cards.add(c);
+//        if(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).size()>=1) {
+        if(Storage.getInstance().loadTask(board).size()>=1) {
+
+//            Log.i("KUNDJDJ", "V");
+//            if (Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position)) != null) {
+//                Log.i("KUNDJDJ", "@");
+            if (Storage.getInstance().loadCard(board,Storage.getInstance().loadTask(board).get(position)) != null) {
+
+//                Log.i("KUNDJDJ-Board", ((Board) board.getIntent().getSerializableExtra("board")).getBoard_name()+":"+((Board) board.getIntent().getSerializableExtra("board")).getReableCreatedTime());
+//                Log.i("KUNDJDJ-Task", Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position).getTask_name()+":"+Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position).getReableCreatedTime());
+//                Log.i("KUNDJDJ",Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position)).size()+"");
+                for (Card c : Storage.getInstance().loadCard(board, Storage.getInstance().loadTask(board).get(position))) {
+                    Log.i("KUNDJDJ", c.getCard_name());
+                    cards.add(c);
+                }
             }
         }
         cardAdapter.notifyDataSetChanged();

@@ -21,7 +21,10 @@ import android.widget.EditText;
 
 import com.example.exceed.minitrello.R;
 import com.example.exceed.minitrello.models.Board;
+import com.example.exceed.minitrello.models.Card;
+import com.example.exceed.minitrello.models.Comment;
 import com.example.exceed.minitrello.models.Storage;
+import com.example.exceed.minitrello.models.Task;
 import com.example.exceed.minitrello.views.BoardAdapter;
 
 import java.io.Serializable;
@@ -29,7 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.example.exceed.minitrello.views.BoardAdapter.*;
+import static com.example.exceed.minitrello.views.BoardAdapter.OnItemClickListener;
 
 public class MainActivity extends AppCompatActivity implements Serializable{
 
@@ -64,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         boardAdapter.SetOnItemClickListener(new OnItemClickListener(){
             @Override
             public void onItemClick(View view, int position) {
-                Log.i("PosKU",position+"");
                 Intent intent = new Intent(MainActivity.this, BoardActivity.class);
                 intent.putExtra("board",boards.get(position));
                 startActivity(intent);
@@ -148,6 +150,22 @@ public class MainActivity extends AppCompatActivity implements Serializable{
             });
             builder.show();
             return true;
+        }
+        if (id == R.id.action_storage){
+            Log.i("Tem-Storage","Start");
+            for(Board b:Storage.getInstance().loadBoard()){
+                Log.i("Tem-Storage-Board",b.getBoard_name()+":"+b.getReableCreatedTime());
+                for(Task t:Storage.getInstance().loadTask(b)){
+                    Log.i("Tem-Storage-Task",t.getTask_name()+":"+t.getReableCreatedTime());
+                    for(Card c:Storage.getInstance().loadCard(b,t)){
+                        Log.i("Tem-Storage-Card",c.getCard_name()+":"+c.getReableCreatedTime());
+                        for(Comment co:Storage.getInstance().loadComment(b,t,c)){
+                            Log.i("Tem-Storage-Comment",co.getComment_name()+":"+co.getReableCreatedTime());
+                        }
+                    }
+                }
+            }
+            Log.i("Tem-Storage","Finish");
         }
         return super.onOptionsItemSelected(item);
     }

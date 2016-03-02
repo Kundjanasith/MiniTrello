@@ -123,7 +123,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                     public void onClick(DialogInterface dialog, int which) {
 //                        Storage.getInstance().removeCard(board,task,cards.get(i));
 //                        cards.remove(cards.get(i));
-                        Storage.getInstance().removeComment(board,task,card,i);
+                        Storage.getInstance().removeComment(board,task,card,comments.get(i));
                         comments.remove(i);
                         notifyDataSetChanged();
                     }

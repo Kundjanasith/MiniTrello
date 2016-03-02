@@ -17,30 +17,34 @@ import java.util.List;
 public class TaskAdapter extends FragmentPagerAdapter implements Serializable{
 
     private Task task;
-    private BoardActivity board;
-    public TaskAdapter(FragmentManager fm,BoardActivity boardActivity) {
+//    private BoardActivity board;
+    private Board board;
+//    public TaskAdapter(FragmentManager fm,BoardActivity boardActivity) {
+    public TaskAdapter(FragmentManager fm,Board board){
         super(fm);
-        this.board = boardActivity;
+        this.board = board;
 
     }
 
     @Override
     public Fragment getItem(int position) {
-        List<Task> temp = Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"));
+//        List<Task> temp = Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"));
+        List<Task> temp = Storage.getInstance().loadTask(board);
         if(temp.size()==0&&position==0) Log.i("yes","yrs");
         if(temp.size()==0){
             Log.i("yed", position+"");
-            return new TaskFragment(null,this,board,"Add Task",position);
+            return new TaskFragment(this,board,"Add Task",position);
         }
         else{
             Log.i("yedk", position+"");
-            return new TaskFragment(temp.get(position),this,board,temp.get(position).getTask_name(),position);
+            return new TaskFragment(this,board,temp.get(position).getTask_name(),position);
         }
     }
 
     @Override
     public int getCount() {
-        List<Task> temp = Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"));
+//        List<Task> temp = Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"));
+        List<Task> temp = Storage.getInstance().loadTask(board);
         if(temp.size()==0) return 1;
         else return temp.size();
     }

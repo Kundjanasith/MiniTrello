@@ -17,5 +17,10 @@
         android:orderInCategory="100"
         android:title="Sort"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/action_storage"
+        android:orderInCategory="100"
+        android:title="Storage"
+        app:showAsAction="never"/>
 
 </menu>
