@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Comment name "
+        android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+        android:id="@+id/rename_board_name"
+        android:layout_weight="0.00" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Comment name"
+        android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+        android:id="@+id/edittext" />
+
+</LinearLayout>
