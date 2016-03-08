@@ -33,6 +33,7 @@
         android:layout_width="401dp"
         android:layout_height="50dp"
         android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+        android:gravity="center"
         android:textAlignment="center"
         android:text="@string/hello_blank_fragment"
         android:layout_alignParentTop="true"

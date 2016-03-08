@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.exceed.minitrello.R;
@@ -147,16 +147,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         private TextView comment_name;
         private TextView comment_text;
         private TextView comment_time;
-        private Button delete_comment_button;
-        private Button edit_comment_button;
+        private ImageButton delete_comment_button;
+        private ImageButton edit_comment_button;
 
         public ViewHolder(View itemView) {
             super(itemView);
             comment_name = (TextView) itemView.findViewById(R.id.comment_name);
             comment_text = (TextView) itemView.findViewById(R.id.comment_text);
             comment_time = (TextView) itemView.findViewById(R.id.comment_time);
-            delete_comment_button = (Button) itemView.findViewById(R.id.delete_comment_button);
-            edit_comment_button = (Button) itemView.findViewById(R.id.edit_comment_button);
+            delete_comment_button = (ImageButton) itemView.findViewById(R.id.delete_comment_button);
+            edit_comment_button = (ImageButton) itemView.findViewById(R.id.edit_comment_button);
             itemView.setOnClickListener(this);
         }
 

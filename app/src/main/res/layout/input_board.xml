@@ -15,8 +15,17 @@
 
     <EditText
         android:id="@+id/edittext"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Board name"
         android:padding="10dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Please enter board name"
+        android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame"
+        android:editable="false"
+        android:id="@+id/error" />
+
 </LinearLayout>

@@ -46,20 +46,24 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentStart="true" />
 
-        <Button
+        <ImageButton
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Delete"
+            android:background="#28a8ed"
+            android:src="@android:drawable/ic_menu_delete"
             android:id="@+id/delete_comment_button"
             android:layout_above="@+id/comment_text"
             android:layout_alignParentEnd="true" />
 
-        <Button
+        <ImageButton
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Edit"
+            android:background="#28a8ed"
+            android:src="@android:drawable/ic_menu_edit"
             android:id="@+id/edit_comment_button"
             android:layout_alignBottom="@+id/comment_name"
             android:layout_toStartOf="@+id/delete_comment_button" />

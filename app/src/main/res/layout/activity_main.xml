@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
-        android:id="@+id/android.support.v7.widget.RecyclerView"
+        android:id="@+id/appbar"
         android:background="?attr/colorPrimary">
 
         <android.support.v7.widget.Toolbar
@@ -29,7 +29,8 @@
         android:layout_gravity="bottom"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/android.support.v7.widget.RecyclerView"/>
+        android:background="#e8d5ad"
+        android:layout_below="@+id/appbar" />
        <!--android:background="#97e4d7" />-->
 
 
@@ -41,12 +42,14 @@
         android:layout_gravity="bottom|end"
         android:adjustViewBounds="false"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="#00ad25"
+        app:backgroundTint="#c1b1ff"
         android:tint="#ffffff"
         android:layout_marginLeft="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="35dp"
+        android:layout_alignBottom="@+id/board_cardList"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp" />
 
 </RelativeLayout>
 

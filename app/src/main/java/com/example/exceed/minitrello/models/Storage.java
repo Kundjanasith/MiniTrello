@@ -22,6 +22,9 @@ public class Storage {
 
     private Storage() {
         saveBoard = new ArrayList<Board>();
+//        saveBoard.add(new Board("Awe"));
+//        saveBoard.add(new Board("Some"));
+//        saveBoard.add(new Board("Boards"));
     }
 
     public static Storage getInstance() {

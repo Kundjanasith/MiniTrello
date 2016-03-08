@@ -3,11 +3,13 @@ package com.example.exceed.minitrello.views;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.exceed.minitrello.R;
@@ -15,9 +17,10 @@ import com.example.exceed.minitrello.activities.MainActivity;
 import com.example.exceed.minitrello.models.Board;
 import com.example.exceed.minitrello.models.Storage;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> {
+public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> implements Serializable {
 
     private final List<Board> boards;
     OnItemClickListener mItemClickListener;
@@ -53,20 +56,45 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 final View promptView = layoutInflater.inflate(R.layout.do_board_rename, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 final TextView editText = (TextView) promptView.findViewById(R.id.edittext);
+                final TextView error = (TextView) promptView.findViewById(R.id.error);
                 builder.setView(promptView);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        if (editText.getText().toString().equals("")) {
+                            error.setText("Please enter board name");
+                        } else {
+                            error.setText("Your board name : " + editText.getText().toString());
+                        }
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Storage.getInstance().loadBoard().get(i).setBoard_name(editText.getText().toString());
-                        boards.get(i).setBoard_name(editText.getText().toString());
-                        notifyDataSetChanged();
+                        if (editText.getText().toString().equals("")) ;
+                        else {
+                            Storage.getInstance().loadBoard().get(i).setBoard_name(editText.getText().toString());
+                            boards.get(i).setBoard_name(editText.getText().toString());
+                            notifyDataSetChanged();
+                        }
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for(Board b:Storage.getInstance().loadBoard()){
-                            Log.i("SE",b.getBoard_name());
+                        for (Board b : Storage.getInstance().loadBoard()) {
+                            Log.i("SE", b.getBoard_name());
                         }
                         dialog.cancel();
                     }
@@ -117,15 +145,15 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
 
         private TextView board_name;
         private TextView board_time;
-        private Button edit_board_button;
-        private Button delete_board_button;
+        private ImageButton edit_board_button;
+        private ImageButton delete_board_button;
 
         public ViewHolder(View itemView) {
             super(itemView);
             board_name = (TextView) itemView.findViewById(R.id.board_name);
             board_time = (TextView) itemView.findViewById(R.id.board_time);
-            edit_board_button = (Button) itemView.findViewById(R.id.edit_board_button);
-            delete_board_button = (Button) itemView.findViewById(R.id.delete_board_button);
+            edit_board_button = (ImageButton) itemView.findViewById(R.id.edit_board_button);
+            delete_board_button = (ImageButton) itemView.findViewById(R.id.delete_board_button);
             itemView.setOnClickListener(this);
         }
 

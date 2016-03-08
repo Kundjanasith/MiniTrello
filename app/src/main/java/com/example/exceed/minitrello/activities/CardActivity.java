@@ -8,7 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.exceed.minitrello.R;
@@ -28,7 +28,7 @@ public class CardActivity extends AppCompatActivity {
     private CommentAdapter commentAdapter;
     //    private ListView listView;
     private RecyclerView recList;
-    private Button send_button;
+    private ImageButton send_button;
     private TextView comment_name;
     private TextView comment_text;
     private TextView description;
@@ -54,7 +54,7 @@ public class CardActivity extends AppCompatActivity {
         Log.i("Z-board", bo.getReableCreatedTime());
         Log.i("Z-task", ta.getReableCreatedTime());
         String t = ca.getCard_name();
-        send_button = (Button) findViewById(R.id.send_button);
+        send_button = (ImageButton) findViewById(R.id.send_button);
         comment_name = (TextView) findViewById(R.id.mentor_text);
         comment_text = (TextView) findViewById(R.id.comment_text);
         description = (TextView) findViewById(R.id.card_description_edittext);
@@ -80,6 +80,8 @@ public class CardActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Storage.getInstance().saveComment(bo,ta, ca, new Comment(comment_name.getText().toString(), comment_text.getText().toString()));
                 refreshComments();
+                comment_name.setText("");
+                comment_text.setText("");
             }
         });
     }

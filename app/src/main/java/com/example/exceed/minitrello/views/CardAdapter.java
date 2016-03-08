@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.exceed.minitrello.R;
@@ -136,15 +136,15 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
         private TextView card_name;
         private TextView card_time;
-        private Button delete_card_button;
-        private Button edit_card_button;
+        private ImageButton delete_card_button;
+        private ImageButton edit_card_button;
 
         public ViewHolder(View itemView) {
             super(itemView);
             card_name = (TextView) itemView.findViewById(R.id.card_name);
             card_time = (TextView) itemView.findViewById(R.id.card_time);
-            delete_card_button = (Button) itemView.findViewById(R.id.delete_card_button);
-            edit_card_button = (Button) itemView.findViewById(R.id.edit_card_button);
+            delete_card_button = (ImageButton) itemView.findViewById(R.id.delete_card_button);
+            edit_card_button = (ImageButton) itemView.findViewById(R.id.edit_card_button);
             itemView.setOnClickListener(this);
         }
 

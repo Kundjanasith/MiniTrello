@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -67,37 +68,32 @@
         android:layout_height="wrap_content"
         android:id="@+id/comment_text"
         android:layout_alignParentBottom="true"
-        android:layout_alignRight="@+id/textView2"
-        android:layout_alignEnd="@+id/textView2"
         android:hint="Add comment"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/send_button" />
 
-    <Button
+    <ImageButton
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send"
+        android:src="@android:drawable/ic_menu_send"
         android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame"
         android:id="@+id/send_button"
-        android:layout_alignBottom="@+id/comment_text"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_toRightOf="@+id/comment_text"
-        android:layout_toEndOf="@+id/comment_text"
-        android:layout_alignTop="@+id/comment_text" />
+        android:background="#50c8e6" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/mentor_text"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:hint="Name "
         android:layout_above="@+id/comment_text"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/coment_listView" />
+        android:layout_toStartOf="@+id/send_button" />
 
 
 </RelativeLayout>

@@ -5,12 +5,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.exceed.minitrello.R;
 import com.example.exceed.minitrello.models.Board;
@@ -32,7 +36,7 @@ import java.util.List;
 
 import static com.example.exceed.minitrello.views.BoardAdapter.OnItemClickListener;
 
-public class MainActivity extends AppCompatActivity implements Serializable {
+public class MainActivity extends AppCompatActivity implements Serializable{
 
     private BoardAdapter boardAdapter;
     private List<Board> boards;
@@ -41,21 +45,22 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private Button button_sort_time;
     private RecyclerView recList;
     public static Toolbar toolbar;
-
+    public static ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(Storage.getInstance().getColor()==null) ;
-        else toolbar.setBackgroundColor(Color.argb(255, Storage.getInstance().getColor().getToolbarColor()[0], Storage.getInstance().getColor().getToolbarColor()[1], Storage.getInstance().getColor().getToolbarColor()[2]));
+        toolbar.setBackgroundColor(Color.rgb(255,106,101));
+//        if(Storage.getInstance().getColor()==null) ;
+//        else toolbar.setBackgroundColor(Color.argb(255, Storage.getInstance().getColor().getToolbarColor()[0], Storage.getInstance().getColor().getToolbarColor()[1], Storage.getInstance().getColor().getToolbarColor()[2]));
         setSupportActionBar(toolbar);
         init();
     }
 
     private void init(){
-        boards = new ArrayList<Board>();
+        boards = new ArrayList<>();
         recList = (RecyclerView) findViewById(R.id.board_cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -85,14 +90,38 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     private void showInputDialog() {
         LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
         final View promptView = layoutInflater.inflate(R.layout.input_board, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         final EditText editText = (EditText) promptView.findViewById(R.id.edittext);
+        final TextView error = (TextView) promptView.findViewById(R.id.error);
         builder.setView(promptView);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (editText.getText().toString().equals("")) {
+                    error.setText("Please enter board name");
+                } else {
+                    error.setText("Your board name : " + editText.getText().toString());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Storage.getInstance().saveBoard(new Board(editText.getText().toString()));
-                refreshBoards();
+                if(editText.getText().toString().equals("")) ;
+                else{
+                    Storage.getInstance().saveBoard(new Board(editText.getText().toString()));
+                    refreshBoards();
+                }
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -108,11 +137,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        // Retrieve the SearchView and plug it into SearchManager
-//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-//        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-//        Log.i("SEARCH",searchManager.getSearchableInfo(getComponentName()).toString());
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        actionBar = getSupportActionBar();
+        Log.i("acab", String.valueOf(actionBar));
         return true;
     }
 
@@ -126,12 +152,12 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             Log.i("Kundjanasith", "TH");
             return true;
         }
-        if (id == R.id.action_theme) {
-            Intent intent = new Intent(MainActivity.this, ThemeActivity.class);
+//        if (id == R.id.action_theme) {
+//            Intent intent = new Intent(MainActivity.this, ThemeActivity.class);
 //            intent.putExtra("toolbar",  toolbar);
-            startActivity(intent);
-            return true;
-        }
+//            startActivity(intent);
+//            return true;
+//        }
         if (id == R.id.action_sort){
             LayoutInflater layoutInflater = LayoutInflater.from(MainActivity.this);
             final View promptView = layoutInflater.inflate(R.layout.input_sort, null);
@@ -166,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         }
         if (id == R.id.action_search){
             Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+            ActionBar a = getSupportActionBar();
             startActivity(intent);
             return true;
         }
@@ -188,6 +215,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 //        }
         return super.onOptionsItemSelected(item);
     }
+
 
      public void refreshBoards(){
         boards.clear();
