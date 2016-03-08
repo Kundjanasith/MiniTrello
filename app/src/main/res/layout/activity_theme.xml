@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.example.exceed.minitrello.activities.ThemeActivity">
+    tools:context="com.example.exceed.minitrello.activities.ThemeActivity"
+    android:background="#fbf8f8">
+
 
     <SeekBar
         android:layout_width="wrap_content"
@@ -115,7 +119,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="FOREGROUND"
+        android:text="TOOLBAR"
         android:id="@+id/Foreground_theme"
         android:textSize="50dp"
         android:textStyle="bold|normal|italic"
@@ -153,7 +157,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="BUTTON"
+        android:text="TEXT"
         android:id="@+id/Button_theme"
         android:textSize="50dp"
         android:textStyle="bold|normal|italic"
@@ -207,8 +211,7 @@
         android:text="G : "
         android:id="@+id/textView12"
         android:layout_above="@+id/textView8"
-        android:layout_toLeftOf="@+id/Foreground_theme"
-        android:layout_toStartOf="@+id/Foreground_theme" />
+        android:layout_alignStart="@+id/textView13" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -224,7 +227,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Set Theme"
-        android:id="@+id/textView14"
+        android:id="@+id/button_set_theme"
         android:textSize="40dp"
         android:textStyle="bold|normal|italic"
         android:layout_alignParentTop="true"

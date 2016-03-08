@@ -126,37 +126,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             board_time = (TextView) itemView.findViewById(R.id.board_time);
             edit_board_button = (Button) itemView.findViewById(R.id.edit_board_button);
             delete_board_button = (Button) itemView.findViewById(R.id.delete_board_button);
-//            deleteClick();
             itemView.setOnClickListener(this);
         }
-
-//        private void deleteClick(){
-//            delete_board_button.setOnClickListener(new View.OnClickListener(){
-//                @Override
-//                public void onClick(View v) {
-//                    LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
-//
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-//                    final TextView editText = (TextView) promptView.findViewById(R.id.delete_board_name);
-//                    Board board = (Board)
-//                    editText.setText("Board name : "+getBoard_name());
-//                    builder.setView(promptView);
-//                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//
-//                        }
-//                    });
-//                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.cancel();
-//                        }
-//                    });
-//                    builder.show();
-//                }
-//            });
-//        }
 
         @Override
         public void onClick(View v) {

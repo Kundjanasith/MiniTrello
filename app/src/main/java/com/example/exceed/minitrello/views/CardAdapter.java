@@ -56,10 +56,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         if(cards.size()>0) {
-//            Log.i("Storage-Size0",board.getBoard_name());
-//            Log.i("Storage-Size0", task.getTask_name());
-//            Log.i("Storage-Size1",Storage.getInstance().loadCard(board,task).size()+"");
-//            Log.i("Card-Size",cards.size()+"");
             viewHolder.card_name.setText("Card name : " + cards.get(i).getCard_name());
             viewHolder.card_time.setText("Created time : " + cards.get(i).getReableCreatedTime());
             clickDelete(i);

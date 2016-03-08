@@ -25,7 +25,8 @@
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.CardActivity" />
-        <activity android:name=".activities.ThemeActivity"></activity>
+        <activity android:name=".activities.ThemeActivity" />
+        <activity android:name=".activities.SearchActivity"></activity>
     </application>
 
 </manifest>
