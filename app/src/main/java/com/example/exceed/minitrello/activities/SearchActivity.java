@@ -7,10 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,9 +25,7 @@ import java.util.List;
 public class SearchActivity extends AppCompatActivity {
 
     private List<Board> boards;
-    private RecyclerView recList;
     private SearchAdapter searchAdapter;
-    private Toolbar toolbar;
     private EditText searchET;
 
     @Override
@@ -37,9 +33,6 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setTitle("Search");
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-//        toolbar.setBackgroundColor(Color.argb(0,0,0,0));;
         boards = new ArrayList<>();
     }
 
@@ -60,7 +53,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void init() {
-        recList = (RecyclerView) findViewById(R.id.board_cardList);
+        RecyclerView recList = (RecyclerView) findViewById(R.id.board_cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -79,7 +72,6 @@ public class SearchActivity extends AppCompatActivity {
         });
 
         ActionBar actionBar = getSupportActionBar();
-        Log.i("acac", String.valueOf(actionBar));
 
         assert actionBar != null;
         actionBar.setDisplayShowCustomEnabled(true);
@@ -98,9 +90,9 @@ public class SearchActivity extends AppCompatActivity {
                 if (searchET.getText().toString().equals("")) {
                     boards.clear();
                     searchAdapter.notifyDataSetChanged();
+                } else {
+                    filter(searchET.getText().toString());
                 }
-                // Log.i("SEARCH_TT", searchET.getText().toString());
-                else filter(searchET.getText().toString());
             }
 
             @Override
@@ -112,25 +104,14 @@ public class SearchActivity extends AppCompatActivity {
 
     private void filter(String text) {
         String query = text.toLowerCase();
-        // output list
-//        List<Board> Filtered = new ArrayList<Board>();
         boards.clear();
         for (Board w : Storage.getInstance().loadBoard()) {
             if (w.getBoard_name().toLowerCase().contains(query)) {
-                Log.i("MiniTrello", w.getBoard_name());
                 boards.add(w);
             }
         }
         searchAdapter.notifyDataSetChanged();
     }
-
-//    public void refreshBoards(){
-//        boards.clear();
-//        for(Board board : Storage.getInstance().loadBoard()){
-//            boards.add(board);
-//        }
-//        searchAdapter.notifyDataSetChanged();
-//    }
 
     public List<Board> getBoards() {
         return this.boards;

@@ -1,14 +1,11 @@
 package com.example.exceed.minitrello.models;
 
-/**
- * Created by exceed on 3/4/16 AD.
- */
 public class ColorAll {
     private int[] textColor;
     private int[] toolbarColor;
     private int[] backgroundColor;
 
-    public ColorAll(int[] textColor, int[] toolbarColor, int[] backgroundColor){
+    public ColorAll(int[] textColor, int[] toolbarColor, int[] backgroundColor) {
         this.textColor = textColor;
         this.toolbarColor = toolbarColor;
         this.backgroundColor = backgroundColor;

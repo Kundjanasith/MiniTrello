@@ -3,7 +3,6 @@ package com.example.exceed.minitrello.views;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     OnItemClickListener mItemClickListener;
     private ViewHolder viewHolder;
 
-    public SearchAdapter(SearchActivity searchActivity){
+    public SearchAdapter(SearchActivity searchActivity) {
         this.boards = searchActivity.getBoards();
     }
 
@@ -33,7 +32,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.cell_board, viewGroup, false);
-        Log.i("SERV", i + "");
         viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -46,7 +44,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         clickEdit(i);
     }
 
-    public void clickEdit(final int i){
+    public void clickEdit(final int i) {
         viewHolder.edit_board_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,9 +64,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (Board b : Storage.getInstance().loadBoard()) {
-                            Log.i("SE", b.getBoard_name());
-                        }
                         dialog.cancel();
                     }
                 });
@@ -77,15 +72,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         });
     }
 
-    public void clickDelete(final int i){
-        viewHolder.delete_board_button.setOnClickListener(new View.OnClickListener(){
+    public void clickDelete(final int i) {
+        viewHolder.delete_board_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
                 final View promptView = layoutInflater.inflate(R.layout.do_board_delete, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 final TextView editText = (TextView) promptView.findViewById(R.id.delete_board_name);
-                editText.setText("Board name : "+boards.get(i).getBoard_name());
+                editText.setText("Board name : " + boards.get(i).getBoard_name());
                 builder.setView(promptView);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -98,9 +93,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (Board b : Storage.getInstance().loadBoard()) {
-                            Log.i("SE",b.getBoard_name());
-                        }
                         dialog.cancel();
                     }
                 });
@@ -108,6 +100,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return boards.size();
@@ -121,7 +114,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         void onItemClick(View view, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView board_name;
         private TextView board_time;

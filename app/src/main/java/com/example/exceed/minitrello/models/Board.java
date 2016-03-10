@@ -7,19 +7,16 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by exceed on 2/26/16 AD.
- */
-public class Board implements Serializable{
+public class Board implements Serializable {
 
     private String board_name;
     private List<Task> board_tasks;
     private long board_createTime;
     private Date board_date;
 
-    public Board(String board_name){
+    public Board(String board_name) {
         this.board_name = board_name;
-        this.board_tasks = new ArrayList<Task>();
+        this.board_tasks = new ArrayList<>();
         this.board_createTime = System.currentTimeMillis();
         this.board_date = new Date();
     }
@@ -48,7 +45,7 @@ public class Board implements Serializable{
         this.board_createTime = board_createTime;
     }
 
-    public String getReableCreatedTime(){
+    public String getReableCreatedTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
         return sdf.format(this.board_date);
     }
@@ -59,7 +56,7 @@ public class Board implements Serializable{
         if (!(o instanceof Board)) return false;
 
         Board board = (Board) o;
-        return board_createTime== board.board_createTime;
+        return board_createTime == board.board_createTime;
     }
 
     @Override
@@ -74,10 +71,10 @@ public class Board implements Serializable{
         }
     }
 
-    public static class CreatedTimeComparator implements Comparator<Board>{
+    public static class CreatedTimeComparator implements Comparator<Board> {
         @Override
         public int compare(Board board1, Board board2) {
-            return (int)(board1.getBoard_createTime()-board2.getBoard_createTime());
+            return (int) (board1.getBoard_createTime() - board2.getBoard_createTime());
         }
     }
 

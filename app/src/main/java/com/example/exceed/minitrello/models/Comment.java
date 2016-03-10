@@ -3,18 +3,16 @@ package com.example.exceed.minitrello.models;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-/**
- * Created by exceed on 2/26/16 AD.
- */
-public class Comment implements Serializable{
+public class Comment implements Serializable {
 
     private String comment_name;
     private String comment_content;
     private long comment_createTime;
     private Date comment_date;
 
-    public Comment(String comment_name,String comment_content){
+    public Comment(String comment_name, String comment_content) {
         this.comment_name = comment_name;
         this.comment_content = comment_content;
         comment_createTime = System.currentTimeMillis();
@@ -45,8 +43,8 @@ public class Comment implements Serializable{
         this.comment_createTime = comment_createTime;
     }
 
-    public String getReableCreatedTime(){
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    public String getReadableCreatedTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         return sdf.format(this.comment_date);
     }
 

@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -26,9 +25,6 @@ public class CardActivity extends AppCompatActivity {
 
     private List<Comment> comments;
     private CommentAdapter commentAdapter;
-    //    private ListView listView;
-    private RecyclerView recList;
-    private ImageButton send_button;
     private TextView comment_name;
     private TextView comment_text;
     private TextView description;
@@ -36,7 +32,6 @@ public class CardActivity extends AppCompatActivity {
     private Board bo;
     private Task ta;
     private int pos;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +45,14 @@ public class CardActivity extends AppCompatActivity {
         bo = ((Board) getIntent().getSerializableExtra("board"));
         ta = ((Task) getIntent().getSerializableExtra("task"));
         pos = (int) getIntent().getSerializableExtra("pos");
-        Log.i("Z-card", ca.getReableCreatedTime());
-        Log.i("Z-board", bo.getReableCreatedTime());
-        Log.i("Z-task", ta.getReableCreatedTime());
         String t = ca.getCard_name();
-        send_button = (ImageButton) findViewById(R.id.send_button);
+        ImageButton send_button = (ImageButton) findViewById(R.id.send_button);
         comment_name = (TextView) findViewById(R.id.mentor_text);
         comment_text = (TextView) findViewById(R.id.comment_text);
         description = (TextView) findViewById(R.id.card_description_edittext);
         setTitle("Card name : " + t);
-        comments = new ArrayList<Comment>();
-        recList = (RecyclerView) findViewById(R.id.comment_cardList);
+        comments = new ArrayList<>();
+        RecyclerView recList = (RecyclerView) findViewById(R.id.comment_cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
@@ -78,7 +70,7 @@ public class CardActivity extends AppCompatActivity {
         send_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Storage.getInstance().saveComment(bo,ta, ca, new Comment(comment_name.getText().toString(), comment_text.getText().toString()));
+                Storage.getInstance().saveComment(bo, ta, ca, new Comment(comment_name.getText().toString(), comment_text.getText().toString()));
                 refreshComments();
                 comment_name.setText("");
                 comment_text.setText("");
@@ -98,7 +90,6 @@ public class CardActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Log.i("MiniTrello", "BackPressed");
         Storage.getInstance().loadCard(bo, ta).get(pos).setCard_description(description.getText().toString());
     }
 
@@ -118,7 +109,7 @@ public class CardActivity extends AppCompatActivity {
     }
 
     private void refreshDescription() {
-        description.setText(Storage.getInstance().loadCard(bo,ta).get(pos).getCard_description());
+        description.setText(Storage.getInstance().loadCard(bo, ta).get(pos).getCard_description());
     }
 
 }

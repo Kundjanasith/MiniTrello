@@ -3,7 +3,6 @@ package com.example.exceed.minitrello.views;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,17 +40,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.cell_comment, viewGroup, false);
-        Log.i("SERV", i + "");
         viewHolder = new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-            viewHolder.comment_name.setText("By : " + comments.get(i).getComment_name());
-            viewHolder.comment_text.setText("Comment : "+comments.get(i).getComment_content());
-            viewHolder.comment_time.setText("Created time : " + comments.get(i).getReableCreatedTime());
-            clickDelete(i);
+        viewHolder.comment_name.setText("By : " + comments.get(i).getComment_name());
+        viewHolder.comment_text.setText("Comment : " + comments.get(i).getComment_content());
+        viewHolder.comment_time.setText("Created time : " + comments.get(i).getReadableCreatedTime());
+        clickDelete(i);
         clickEdit(i);
     }
 
@@ -83,15 +81,15 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         });
     }
 
-    public void clickDelete(final int i){
-        viewHolder.delete_comment_button.setOnClickListener(new View.OnClickListener(){
+    public void clickDelete(final int i) {
+        viewHolder.delete_comment_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
                 final View promptView = layoutInflater.inflate(R.layout.do_comment_delete, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 final TextView editText = (TextView) promptView.findViewById(R.id.delete_board_name);
-                editText.setText("This comment :"+comments.get(i).getComment_content());
+                editText.setText("This comment :" + comments.get(i).getComment_content());
                 builder.setView(promptView);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -111,6 +109,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return comments.size();
@@ -124,7 +123,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         void onItemClick(View view, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView comment_name;
         private TextView comment_text;

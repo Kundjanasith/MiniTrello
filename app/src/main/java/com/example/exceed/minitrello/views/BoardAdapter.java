@@ -5,7 +5,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     OnItemClickListener mItemClickListener;
     private ViewHolder viewHolder;
 
-    public BoardAdapter(MainActivity mainActivity){
+    public BoardAdapter(MainActivity mainActivity) {
         this.boards = mainActivity.getBoard();
     }
 
@@ -35,7 +34,6 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.cell_board, viewGroup, false);
-        Log.i("SERV", i + "");
         viewHolder = new ViewHolder(v);
         return viewHolder;
     }
@@ -48,7 +46,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         clickEdit(i);
     }
 
-    public void clickEdit(final int i){
+    public void clickEdit(final int i) {
         viewHolder.edit_board_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,9 +90,6 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (Board b : Storage.getInstance().loadBoard()) {
-                            Log.i("SE", b.getBoard_name());
-                        }
                         dialog.cancel();
                     }
                 });
@@ -103,8 +98,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         });
     }
 
-    public void clickDelete(final int i){
-        viewHolder.delete_board_button.setOnClickListener(new View.OnClickListener(){
+    public void clickDelete(final int i) {
+        viewHolder.delete_board_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
@@ -124,9 +119,6 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for (Board b : Storage.getInstance().loadBoard()) {
-                            Log.i("SE",b.getBoard_name());
-                        }
                         dialog.cancel();
                     }
                 });
@@ -134,6 +126,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return boards.size();
@@ -147,7 +140,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         void onItemClick(View view, int position);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView board_name;
         private TextView board_time;

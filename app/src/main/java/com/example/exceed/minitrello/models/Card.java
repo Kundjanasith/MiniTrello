@@ -5,10 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
-/**
- * Created by exceed on 2/26/16 AD.
- */
 public class Card implements Serializable {
 
     private String card_name;
@@ -20,7 +18,7 @@ public class Card implements Serializable {
     public Card(String card_name, String card_description) {
         this.card_name = card_name;
         this.card_description = card_description;
-        this.card_comments = new ArrayList<Comment>();
+        this.card_comments = new ArrayList<>();
         this.card_createTime = System.currentTimeMillis();
         this.card_date = new Date();
     }
@@ -57,8 +55,8 @@ public class Card implements Serializable {
         this.card_createTime = card_createTime;
     }
 
-    public String getReableCreatedTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    public String getReadableCreatedTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss", Locale.US);
         return sdf.format(this.card_date);
     }
 

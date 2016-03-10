@@ -3,33 +3,27 @@ package com.example.exceed.minitrello.models;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by exceed on 2/26/16 AD.
- */
 public class Storage {
 
-    private List<Board> saveBoard;
     private static Storage instance;
-    private static ColorAll color = new ColorAll(new int[]{0,0,0},new int[]{0,0,0},new int[]{0,0,0});
-
-    public ColorAll getColor(){
-        return color;
-    }
-
-    public void setColor(ColorAll c){
-        color = c;
-    }
+    private static ColorAll color = new ColorAll(new int[]{0, 0, 0}, new int[]{0, 0, 0}, new int[]{0, 0, 0});
+    private List<Board> saveBoard;
 
     private Storage() {
-        saveBoard = new ArrayList<Board>();
-//        saveBoard.add(new Board("Awe"));
-//        saveBoard.add(new Board("Some"));
-//        saveBoard.add(new Board("Boards"));
+        saveBoard = new ArrayList<>();
     }
 
     public static Storage getInstance() {
         if (instance == null) return instance = new Storage();
         return instance;
+    }
+
+    public ColorAll getColor() {
+        return color;
+    }
+
+    public void setColor(ColorAll c) {
+        color = c;
     }
 
     public void saveBoard(Board board) {
@@ -124,12 +118,12 @@ public class Storage {
 
     }
 
-    public boolean removeCard(Board board, Task task,Card card) {
-        return loadCard(board,task).remove(card);
+    public boolean removeCard(Board board, Task task, Card card) {
+        return loadCard(board, task).remove(card);
     }
 
-    public boolean removeComment(Board board, Task task, Card card,Comment comment) {
-        return loadComment(board,task,card).remove(comment);
+    public boolean removeComment(Board board, Task task, Card card, Comment comment) {
+        return loadComment(board, task, card).remove(comment);
     }
 
 }

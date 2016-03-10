@@ -3,7 +3,6 @@ package com.example.exceed.minitrello.views;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,52 +17,39 @@ import com.example.exceed.minitrello.models.Storage;
 
 import java.util.List;
 
-/**
- * Created by exceed on 2/29/16 AD.
- */
-
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
 
     private final List<Card> cards;
-    private Board board;
-//    private Task task;
-    private int position;
     OnItemClickListener mItemClickListener;
+    private Board board;
+    private int position;
     private ViewHolder viewHolder;
 
-    public CardAdapter(TaskFragment taskFragment,Board board,int position) {
+    public CardAdapter(TaskFragment taskFragment, Board board, int position) {
         this.cards = taskFragment.getCard();
-//        this.board = (Board) boardActivity.getIntent().getSerializableExtra("board");
-//        this.task = (Task) boardActivity.getIntent().getSerializableExtra("task");
         this.board = board;
-//        this.task = Storage.getInstance().loadTask(board).get(position);
         this.position = position;
     }
-
-//    public void setTask(Task task){
-//        this.task = task;
-//    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.cell_card, viewGroup, false);
-        Log.i("SERV", i + "");
         viewHolder = new ViewHolder(v);
         return viewHolder;
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-        if(cards.size()>0) {
+        if (cards.size() > 0) {
             viewHolder.card_name.setText("Card name : " + cards.get(i).getCard_name());
-            viewHolder.card_time.setText("Created time : " + cards.get(i).getReableCreatedTime());
+            viewHolder.card_time.setText("Created time : " + cards.get(i).getReadableCreatedTime());
             clickDelete(i);
             clickEdit(i);
         }
     }
 
-    private void clickEdit(final int i){
+    private void clickEdit(final int i) {
         viewHolder.edit_card_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,10 +69,6 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.i("TEST", "POL");
-//                        for (Card c : Storage.getInstance().loadCard(board, task)) {
-//                            Log.i("TESTPRO", c.getCard_name());
-//                        }
                         dialog.cancel();
                     }
                 });
@@ -95,30 +77,27 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         });
     }
 
-    private void clickDelete(final int i){
-        viewHolder.delete_card_button.setOnClickListener(new View.OnClickListener(){
+    private void clickDelete(final int i) {
+        viewHolder.delete_card_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
                 LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
                 final View promptView = layoutInflater.inflate(R.layout.do_card_delete, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 final TextView editText = (TextView) promptView.findViewById(R.id.delete_card_name);
-                editText.setText("Card name : "+cards.get(i).getCard_name());
+                editText.setText("Card name : " + cards.get(i).getCard_name());
                 builder.setView(promptView);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(Storage.getInstance().removeCard(board, Storage.getInstance().loadTask(board).get(position), cards.get(i))) cards.remove(i);
+                        if (Storage.getInstance().removeCard(board, Storage.getInstance().loadTask(board).get(position), cards.get(i)))
+                            cards.remove(i);
                         notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.i("JAPAN","ss");
-//                        for(Card s:Storage.getInstance().loadCard(board,task)){
-//                            Log.i("JAPAN",s.getCard_name());
-//                        }
                         dialog.cancel();
                     }
                 });
@@ -126,13 +105,21 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
             }
         });
     }
+
     @Override
     public int getItemCount() {
         return cards.size();
     }
 
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView card_name;
         private TextView card_time;
@@ -151,15 +138,8 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder> {
         @Override
         public void onClick(View v) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, getPosition());
+                mItemClickListener.onItemClick(v, getLayoutPosition());
             }
         }
-    }
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
     }
 }
