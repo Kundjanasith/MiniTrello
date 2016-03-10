@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.Log;
 
-import com.example.exceed.minitrello.activities.BoardActivity;
 import com.example.exceed.minitrello.activities.TaskFragment;
 import com.example.exceed.minitrello.models.Board;
 import com.example.exceed.minitrello.models.Storage;

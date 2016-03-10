@@ -3,4 +3,14 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="temPurple">#C1B1FF</color>
+    <color name="temGgreen">#64FF92</color>
+    <color name="temgreenN">#BAFF7D</color>
+    <color name="temgrEenN">#DDFFDD</color>
+    <color name="temOrange">#E8D5AD</color>
+    <color name="teMRedred">#FF6A65</color>
+    <color name="teMBluele">#28A8ED</color>
+    <color name="teMyellow">#FFFC49</color>
+    <color name="teMYellow">#FFD58F</color>
+
 </resources>

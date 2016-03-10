@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.exceed.minitrello.R;
@@ -38,12 +39,12 @@ import java.util.List;
  * Use the {@link TaskFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TaskFragment extends Fragment{
+public class TaskFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    private static int num_task = 0;
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -55,24 +56,28 @@ public class TaskFragment extends Fragment{
     private List<Card> cards;
     private Board board;
     private TextView taskName;
-    private static int num_task = 0;
     private String title;
     private int position;
     private Button add_card_button;
 //    private ListView listView;
     private CardAdapter cardAdapter;
     private RecyclerView recList;
-
+    private ImageButton delete_task_button;
+    private ImageButton edit_task_button;
 
     public TaskFragment(TaskAdapter taskAdapter,Board board,String title,int position) {
         // Required empty public constructor
 //        this.task = task;
         this.taskAdapter = taskAdapter;
-        this.listTask = new ArrayList<Task>();
-        this.cards = new ArrayList<Card>();
+        this.listTask = new ArrayList<>();
+        this.cards = new ArrayList<>();
         this.board = board;
         this.title = title;
         this.position = position;
+    }
+
+    public static int getNum_page() {
+        return num_task + 1;
     }
 
     /**
@@ -113,6 +118,20 @@ public class TaskFragment extends Fragment{
 
     private void init(View v){
         taskName = (TextView) v.findViewById(R.id.task_name);
+        delete_task_button = (ImageButton) v.findViewById(R.id.delete_task_button);
+        edit_task_button = (ImageButton) v.findViewById(R.id.edit_task_button);
+        delete_task_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInputDialog2();
+            }
+        });
+        edit_task_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showInputDialog3();
+            }
+        });
 //        if(title.equals("Add Task")&&position==0&&Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>=1)
 //            taskName.setText("Task name : "+Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
         if(title.equals("Add Task")&&position==0&&Storage.getInstance().loadTask(board).size()>=1)
@@ -123,16 +142,16 @@ public class TaskFragment extends Fragment{
         add_card_button = (Button) v.findViewById(R.id.add_card_button);
 //        if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()==0) {
         if(Storage.getInstance().loadTask(board).size()==0) {
-            add_task_button.setVisibility(v.VISIBLE);
-            add_card_button.setVisibility(v.INVISIBLE);
+            add_task_button.setVisibility(View.VISIBLE);
+            add_card_button.setVisibility(View.INVISIBLE);
         }
         else{
 //            if(position==Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()-1) {
             if(position==Storage.getInstance().loadTask(board).size()-1) {
-                add_task_button.setVisibility(v.VISIBLE);
+                add_task_button.setVisibility(View.VISIBLE);
             }
             else {
-                add_task_button.setVisibility(v.INVISIBLE);
+                add_task_button.setVisibility(View.INVISIBLE);
             }
         }
 //        cardAdapter = new CardAdapter( getContext(), R.layout.cell_card, cards);
@@ -168,20 +187,6 @@ public class TaskFragment extends Fragment{
                 startActivity(intent);
             }
         });
-
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Intent intent = new Intent(board, CardActivity.class);
-//                intent.putExtra("card", cards.get(position));
-//                intent.putExtra("task", task);
-//                Board temp = (Board) board.getIntent().getSerializableExtra("board");
-//                intent.putExtra("board", temp);
-//                intent.putExtra("pos", position);
-//                startActivity(intent);
-//            }
-//        });
         add_task_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -206,12 +211,7 @@ public class TaskFragment extends Fragment{
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                Log.i("KUN_B", ((Board) board.getIntent().getSerializableExtra("board")).getBoard_name()+":"+((Board) board.getIntent().getSerializableExtra("board")).getReableCreatedTime());
-//                Log.i("KUN_T", Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position).getTask_name()+":"+Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position).getReableCreatedTime());
-//                Storage.getInstance().saveCard((Board) board.getIntent().getSerializableExtra("board")
-//                        , Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position)
-//                        , new Card(editText.getText().toString(), ""));
-                Storage.getInstance().saveCard(board,Storage.getInstance().loadTask(board).get(position),new Card(editText.getText().toString(),""));
+                Storage.getInstance().saveCard(board, Storage.getInstance().loadTask(board).get(position), new Card(editText.getText().toString(), ""));
                 refreshCards();
                 cardAdapter.notifyDataSetChanged();
             }
@@ -220,9 +220,6 @@ public class TaskFragment extends Fragment{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Log.i("XJ","PO");
-//                for (Card s : Storage.getInstance().loadCard((Board) board.getIntent().getSerializableExtra("board"), Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board")).get(position))) {
-//                    Log.i("XJ", s.getCard_name());
-//                }
                 dialog.cancel();
                 refreshCards();
             }
@@ -239,16 +236,7 @@ public class TaskFragment extends Fragment{
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                Log.i("edasdokg", board.getIntent().getSerializableExtra("board").hashCode() + "");
-//                task = new Task(editText.getText().toString());
-//                Storage.getInstance().saveTask((Board) board.getIntent().getSerializableExtra("board"),  new Task(editText.getText().toString()));
                 Storage.getInstance().saveTask(board,new Task(editText.getText().toString()));
-//                Log.i("TH-BOARD", ((Board) board.getIntent().getSerializableExtra("board")).getBoard_name());
-//                for(Task s:Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board"))){
-//                    Log.i("TH-TASK", s.getTask_name());
-//                }
-//                if(Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).size()>=1&&position==0)
-//                  taskName.setText("Task name : "+Storage.getInstance().loadTask((Board)board.getIntent().getSerializableExtra("board")).get(0).getTask_name());
                 if(Storage.getInstance().loadTask(board).size()>=1&&position==0)
                     taskName.setText("Task name : "+Storage.getInstance().loadTask(board).get(0).getTask_name());
 //
@@ -285,8 +273,77 @@ public class TaskFragment extends Fragment{
         builder.show();
     }
 
-    public static int getNum_page(){
-        return num_task+1;
+    private void showInputDialog2() {
+        LayoutInflater layoutInflater = LayoutInflater.from(this.getContext());
+        final View promptView = layoutInflater.inflate(R.layout.do_task_delete, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        final TextView editText = (TextView) promptView.findViewById(R.id.delete_task_name);
+        final TextView x = (TextView) promptView.findViewById(R.id.xxxx);
+        if (Storage.getInstance().loadTask(board).size() >= 1)
+            editText.setText("Task name : " + Storage.getInstance().loadTask(board).get(position).getTask_name());
+        else {
+            editText.setText("No task to delete");
+            x.setText("");
+        }
+        builder.setView(promptView);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (Storage.getInstance().loadTask(board).size() >= 1) {
+                    Storage.getInstance().loadTask(board).remove(position);
+                    listTask.remove(position);
+                    taskAdapter.notifyDataSetChanged();
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (Board b : Storage.getInstance().loadBoard()) {
+                    Log.i("SE", b.getBoard_name());
+                }
+                dialog.cancel();
+            }
+        });
+        builder.show();
+    }
+
+    private void showInputDialog3() {
+        LayoutInflater layoutInflater = LayoutInflater.from(this.getContext());
+        final View promptView = layoutInflater.inflate(R.layout.do_task_rename, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        final TextView editText = (TextView) promptView.findViewById(R.id.edittext);
+//        final TextView x = (TextView) promptView.findViewById(R.id.xxxx);
+        if (Storage.getInstance().loadTask(board).size() >= 1)
+            editText.setHint("Plese enter your task name");
+        else {
+            editText.setHint("No task to rename");
+            editText.setEnabled(false);
+        }
+        builder.setView(promptView);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (Storage.getInstance().loadTask(board).size() >= 1) {
+                    Storage.getInstance().loadTask(board).get(position).setTask_name(editText.getText().toString());
+                    listTask.get(position).setTask_name(editText.getText().toString());
+                    Intent intent = new Intent(getContext(), MainActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                for (Board b : Storage.getInstance().loadBoard()) {
+                    Log.i("SE", b.getBoard_name());
+                }
+                dialog.cancel();
+            }
+        });
+        builder.show();
     }
 
     public List<Card> getCard(){
@@ -295,11 +352,6 @@ public class TaskFragment extends Fragment{
 
     private void refreshTasks(){
         listTask.clear();
-//        if(Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))!=null) {
-//            for (Task task : Storage.getInstance().loadTask((Board) board.getIntent().getSerializableExtra("board"))) {
-//                listTask.add(task);
-//            }
-//        }
         if(Storage.getInstance().loadTask(board)!=null) {
             for (Task task : Storage.getInstance().loadTask(board)) {
                 listTask.add(task);
@@ -354,6 +406,13 @@ public class TaskFragment extends Fragment{
         mListener = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        refreshTasks();
+        refreshCards();
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -367,12 +426,5 @@ public class TaskFragment extends Fragment{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        refreshTasks();
-        refreshCards();
     }
 }

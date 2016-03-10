@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -28,15 +29,18 @@ public class SearchActivity extends AppCompatActivity {
     private List<Board> boards;
     private RecyclerView recList;
     private SearchAdapter searchAdapter;
-//    private List<Board> boardsFiltered;
-
+    private Toolbar toolbar;
+    private EditText searchET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setTitle("Search");
-        boards = new ArrayList<Board>();
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
+//        toolbar.setBackgroundColor(Color.argb(0,0,0,0));;
+        boards = new ArrayList<>();
     }
 
     @Override
@@ -55,10 +59,7 @@ public class SearchActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private EditText searchET;
-
     private void init() {
-
         recList = (RecyclerView) findViewById(R.id.board_cardList);
         recList.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(this);
@@ -80,6 +81,7 @@ public class SearchActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         Log.i("acac", String.valueOf(actionBar));
 
+        assert actionBar != null;
         actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setCustomView(R.layout.search_board_bar);
         actionBar.setDisplayShowTitleEnabled(false);

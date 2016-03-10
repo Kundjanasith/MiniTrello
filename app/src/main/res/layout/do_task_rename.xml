@@ -5,18 +5,19 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/rename_board_name"
+        android:id="@+id/rename_task_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="0.00"
-        android:text="Comment content "
+        android:text="Task name "
         android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame" />
 
     <EditText
         android:id="@+id/edittext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Comment content "
+        android:hint="Task name"
         android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame" />
+
 
 </LinearLayout>

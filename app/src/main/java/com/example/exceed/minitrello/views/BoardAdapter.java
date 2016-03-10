@@ -82,8 +82,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if (editText.getText().toString().equals("")) ;
-                        else {
+                        if (!editText.getText().toString().equals("")) {
                             Storage.getInstance().loadBoard().get(i).setBoard_name(editText.getText().toString());
                             boards.get(i).setBoard_name(editText.getText().toString());
                             notifyDataSetChanged();
@@ -112,7 +111,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 final View promptView = layoutInflater.inflate(R.layout.do_board_delete, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
                 final TextView editText = (TextView) promptView.findViewById(R.id.delete_board_name);
-                editText.setText("Board name : "+boards.get(i).getBoard_name());
+                editText.setText("Board name : " + boards.get(i).getBoard_name());
                 builder.setView(promptView);
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
@@ -125,7 +124,7 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for(Board b:Storage.getInstance().loadBoard()){
+                        for (Board b : Storage.getInstance().loadBoard()) {
                             Log.i("SE",b.getBoard_name());
                         }
                         dialog.cancel();
@@ -140,6 +139,13 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         return boards.size();
     }
 
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -160,15 +166,8 @@ public class BoardAdapter extends RecyclerView.Adapter<BoardAdapter.ViewHolder> 
         @Override
         public void onClick(View v) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, getPosition());
+                mItemClickListener.onItemClick(v, getLayoutPosition());
             }
         }
-    }
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
     }
 }

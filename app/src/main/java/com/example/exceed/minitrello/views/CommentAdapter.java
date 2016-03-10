@@ -20,38 +20,13 @@ import com.example.exceed.minitrello.models.Task;
 
 import java.util.List;
 
-/**
- * Created by exceed on 2/29/16 AD.
- */
-//public class CommentAdapter extends ArrayAdapter<Comment> implements Serializable{
-//
-//    public CommentAdapter(Context context, int resource,List<Comment> objects) {
-//        super(context, resource, objects);
-//    }
-//
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        View v = convertView;
-//        if(v==null){
-//            LayoutInflater vi = LayoutInflater.from(getContext());
-//            v = vi.inflate(R.layout.cell_comment, null);
-//        }
-//        TextView comment_name = (TextView) v.findViewById(R.id.comment_name);
-//        TextView comment_text = (TextView) v.findViewById(R.id.comment_text);
-//        Comment comment = getItem(position);
-//        comment_text.setText("Comment : "+comment.getComment_content());
-//        comment_name.setText(comment.getComment_name());
-//        return v;
-//    }
-//
-//}
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
 
     private final List<Comment> comments;
+    OnItemClickListener mItemClickListener;
     private Board board;
     private Task task;
     private Card card;
-    OnItemClickListener mItemClickListener;
     private ViewHolder viewHolder;
 
     public CommentAdapter(CardActivity cardActivity) {
@@ -77,36 +52,36 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             viewHolder.comment_text.setText("Comment : "+comments.get(i).getComment_content());
             viewHolder.comment_time.setText("Created time : " + comments.get(i).getReableCreatedTime());
             clickDelete(i);
-//            clickEdit(i);
+        clickEdit(i);
     }
 
-//    public void clickEdit(final int i){
-//        viewHolder.edit_comment_button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
-//
-//                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-//                final TextView editText = (TextView) promptView.findViewById(R.id.edittext);
-//                builder.setView(promptView);
-//                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Storage.getInstance().loadComment(board,task,card).get(i).setComment_content(edit);
-//                        comments.get(i).setCard_name(editText.getText().toString());
-//                        notifyDataSetChanged();
-//                    }
-//                });
-//                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                });
-//                builder.show();
-//            }
-//        });
-//    }
+    public void clickEdit(final int i) {
+        viewHolder.edit_comment_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LayoutInflater layoutInflater = LayoutInflater.from(v.getContext());
+                final View promptView = layoutInflater.inflate(R.layout.do_comment_rename, null);
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                final TextView editText = (TextView) promptView.findViewById(R.id.edittext);
+                builder.setView(promptView);
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Storage.getInstance().loadComment(board, task, card).get(i).setComment_content(editText.getText().toString());
+                        comments.get(i).setComment_content(editText.getText().toString());
+                        notifyDataSetChanged();
+                    }
+                });
+                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
+            }
+        });
+    }
 
     public void clickDelete(final int i){
         viewHolder.delete_comment_button.setOnClickListener(new View.OnClickListener(){
@@ -121,7 +96,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Storage.getInstance().removeComment(board,task,card,comments.get(i));
+                        Storage.getInstance().removeComment(board, task, card, comments.get(i));
                         comments.remove(i);
                         notifyDataSetChanged();
                     }
@@ -141,6 +116,13 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         return comments.size();
     }
 
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -163,16 +145,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         @Override
         public void onClick(View v) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, getPosition());
+                mItemClickListener.onItemClick(v, getLayoutPosition());
             }
         }
-    }
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
     }
 }
 

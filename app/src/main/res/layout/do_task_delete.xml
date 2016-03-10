@@ -2,21 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:weightSum="1">
 
     <TextView
-        android:id="@+id/rename_board_name"
+        android:id="@+id/delete_task_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.00"
-        android:text="Comment content "
+        android:layout_weight="0.02"
+        android:text="Do you want to delete it ?"
         android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame" />
 
-    <EditText
-        android:id="@+id/edittext"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/xxxx"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Comment content "
+        android:layout_weight="0.02"
+        android:text="Do you want to delete it ?"
         android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame" />
 
 </LinearLayout>

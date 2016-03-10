@@ -2,7 +2,6 @@ package com.example.exceed.minitrello.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -38,21 +37,21 @@ import static com.example.exceed.minitrello.views.BoardAdapter.OnItemClickListen
 
 public class MainActivity extends AppCompatActivity implements Serializable{
 
+    public static Toolbar toolbar;
+    public static ActionBar actionBar;
     private BoardAdapter boardAdapter;
     private List<Board> boards;
     private FloatingActionButton addBoardButton ;
     private Button button_sort_az;
     private Button button_sort_time;
     private RecyclerView recList;
-    public static Toolbar toolbar;
-    public static ActionBar actionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(Color.rgb(255,106,101));
+//        toolbar.setBackgroundColor(Color.rgb(255,106,101));
 //        if(Storage.getInstance().getColor()==null) ;
 //        else toolbar.setBackgroundColor(Color.argb(255, Storage.getInstance().getColor().getToolbarColor()[0], Storage.getInstance().getColor().getToolbarColor()[1], Storage.getInstance().getColor().getToolbarColor()[2]));
         setSupportActionBar(toolbar);
@@ -117,8 +116,7 @@ public class MainActivity extends AppCompatActivity implements Serializable{
         builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(editText.getText().toString().equals("")) ;
-                else{
+                if (!editText.getText().toString().equals("")) {
                     Storage.getInstance().saveBoard(new Board(editText.getText().toString()));
                     refreshBoards();
                 }
@@ -165,14 +163,14 @@ public class MainActivity extends AppCompatActivity implements Serializable{
             builder.setView(promptView);
             button_sort_az = (Button) promptView.findViewById(R.id.sort_az_button);
             button_sort_time = (Button) promptView.findViewById(R.id.sort_time_button);
-            button_sort_az.setOnClickListener(new View.OnClickListener() {
+            button_sort_az.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Collections.sort(boards, new Board.AlphabetComparator());
                     boardAdapter.notifyDataSetChanged();
                 }
             });
-            button_sort_time.setOnClickListener(new View.OnClickListener() {
+            button_sort_time.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Collections.sort(boards,new Board.CreatedTimeComparator());

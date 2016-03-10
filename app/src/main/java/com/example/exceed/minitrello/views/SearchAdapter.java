@@ -66,8 +66,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for(Board b:Storage.getInstance().loadBoard()){
-                            Log.i("SE",b.getBoard_name());
+                        for (Board b : Storage.getInstance().loadBoard()) {
+                            Log.i("SE", b.getBoard_name());
                         }
                         dialog.cancel();
                     }
@@ -98,7 +98,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        for(Board b:Storage.getInstance().loadBoard()){
+                        for (Board b : Storage.getInstance().loadBoard()) {
                             Log.i("SE",b.getBoard_name());
                         }
                         dialog.cancel();
@@ -113,6 +113,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         return boards.size();
     }
 
+    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+        this.mItemClickListener = mItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(View view, int position);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -133,15 +140,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         @Override
         public void onClick(View v) {
             if (mItemClickListener != null) {
-                mItemClickListener.onItemClick(v, getPosition());
+                mItemClickListener.onItemClick(v, getLayoutPosition());
             }
         }
-    }
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-    }
-
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
-        this.mItemClickListener = mItemClickListener;
     }
 }
