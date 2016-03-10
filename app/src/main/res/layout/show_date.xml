@@ -10,19 +10,19 @@
     tools:context="com.example.exceed.minitrello.activities.DateActivity">
 
     <CalendarView
+        android:id="@+id/calendarView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/calendarView"
         android:layout_below="@+id/textClock"
         android:layout_centerHorizontal="true" />
 
     <TextClock
+        android:id="@+id/textClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textClock"
-        android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame"
-        android:gravity="center"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame" />
 
 </RelativeLayout>

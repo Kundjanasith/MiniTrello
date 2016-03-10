@@ -26,34 +26,33 @@
         android:layout_gravity="bottom|end"
         android:src="@android:drawable/ic_menu_add"
         android:tint="#ffffff"
-        app:backgroundTint="@color/temPurple" />
+        app:backgroundTint="@color/accentPurple" />
 
     <TextView
         android:id="@+id/task_name"
         android:layout_width="401dp"
         android:layout_height="50dp"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="58dp"
         android:layout_toStartOf="@+id/edit_task_button"
-        android:background="@color/temgrEenN"
+        android:background="@color/accentPaleGreen"
         android:gravity="center"
-        android:shadowColor="@color/temgreenN"
+        android:shadowColor="@color/accentGreen"
         android:text="@string/hello_blank_fragment"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textSize="@dimen/item_touch_helper_max_drag_scroll_per_frame" />
 
     <!--<ListView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:id="@+id/card_listView"-->
-        <!--android:layout_below="@+id/task_name"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--android:layout_above="@+id/add_task_button" />-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/card_listView"-->
+    <!--android:layout_below="@+id/task_name"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_alignParentStart="true"-->
+    <!--android:layout_above="@+id/add_task_button" />-->
 
     <Button
         android:id="@+id/add_card_button"
@@ -73,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/task_name"
-        android:background="@color/temgrEenN"
+        android:background="@color/accentPaleGreen"
         android:src="@android:drawable/ic_menu_delete" />
 
     <ImageButton
@@ -82,7 +81,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/task_name"
         android:layout_toStartOf="@+id/delete_task_button"
-        android:background="@color/temgrEenN"
+        android:background="@color/accentPaleGreen"
         android:src="@android:drawable/ic_menu_edit" />
 
 </RelativeLayout>
